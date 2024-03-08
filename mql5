@@ -1,0 +1,96 @@
+
+// Developer: Forex Robot Easy Team
+// Site: forexroboteasy.com
+// Program: Market Reversal Alerts Dashboard
+
+// Import necessary libraries
+#include <Trade\Trade.mqh>
+#include <Controls\ChartObjects.mqh>
+#include <Controls\Button.mqh>
+#include <Controls\Label.mqh>
+#include <Controls\ComboBox.mqh>
+
+// Declare global variables
+CTrade trade;
+CButton alertButton;
+CLabel alertLabel;
+CComboBox currencyPairComboBox;
+CComboBox timeFrameComboBox;
+
+// Initialize the dashboard
+void OnInit()
+{
+    // Set up chart objects
+    alertButton.Create(0, 'Alert', 0, 0, 50, 20);
+    alertLabel.Create(0, 'No alerts', 0, 25, 100, 20);
+    currencyPairComboBox.Create(0, 'Currency Pair', 0, 50, 100, 20);
+    timeFrameComboBox.Create(0, 'Time Frame', 0, 75, 100, 20);
+    
+    // Add currency pairs to the combo box
+    currencyPairComboBox.AddItem('EURUSD');
+    currencyPairComboBox.AddItem('GBPUSD');
+    currencyPairComboBox.AddItem('USDJPY');
+    
+    // Add time frames to the combo box
+    timeFrameComboBox.AddItem('M5');
+    timeFrameComboBox.AddItem('M15');
+    timeFrameComboBox.AddItem('H1');
+    timeFrameComboBox.AddItem('D1');
+}
+
+// Handle button click event
+void OnChartEvent(const int id, const long& lparam, const double& dparam, const string& sparam)
+{
+    if (id == CHARTEVENT_CLICK)
+    {
+        if (alertButton.PointInRect(lparam, dparam))
+        {
+            string currencyPair = currencyPairComboBox.GetValue();
+            string timeFrame = timeFrameComboBox.GetValue();
+            
+            // Perform reversal analysis and generate alerts
+            bool reversalAlert = PerformReversalAnalysis(currencyPair, timeFrame);
+            
+            if (reversalAlert)
+            {
+                // Send alert to trader
+                SendAlert(currencyPair, timeFrame);
+                alertLabel.SetText('Alert generated');
+            }
+            else
+            {
+                alertLabel.SetText('No alerts');
+            }
+        }
+    }
+}
+
+// Perform reversal analysis
+bool PerformReversalAnalysis(const string& currencyPair, const string& timeFrame)
+{
+    // TODO: Implement reversal analysis logic here
+    
+    // Placeholder logic for demonstration purposes
+    int randomNum = MathRandom(0, 1);
+    
+    return randomNum == 1;
+}
+
+// Send alert to trader
+void SendAlert(const string& currencyPair, const string& timeFrame)
+{
+    // TODO: Implement alert sending mechanism here
+    
+    // Placeholder logic for demonstration purposes
+    Print('Alert: Reversal detected on ' + currencyPair + ' ' + timeFrame);
+}
+
+// Handle program shutdown
+void OnDeinit(const int reason)
+{
+    // Clean up chart objects
+    alertButton.Delete();
+    alertLabel.Delete();
+    currencyPairComboBox.Delete();
+    timeFrameComboBox.Delete();
+}
